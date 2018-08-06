@@ -49,21 +49,7 @@ scheduler = cfg[config]['SCHEDULER']
 #to = cfg['DEFAULT]']['TIMEOUT'] #TODO
 timeout = 5
 #---
-#script = "/system script add name=script69 source=\"/ip ssh regenerate-host-key;/system scheduler remove numbers=69;/system script remove numbers=script69;\"" + "\r\n" + "\"\""
 script = "/system script add name=script69 source=\"/ip ssh regenerate-host-key;/system scheduler remove numbers=69;/system script remove numbers=script69;\""
-
-#script = bytearray()
-#script.append('a')
-b = bytearray(script, "utf8")
-b[67:68] = b'\x0D'
-b[68:69] = b'\x0A'
-b.append(0x0D)
-b.append(0x0A)
-#script.append('b')
-
-print("b: ", b)
-
-input()
 
 ##########################################################################
    
@@ -101,10 +87,10 @@ for i, line in enumerate(file_in):
                 if buf.endswith('] > ') == True:
                     debug('We found prompt, sending scheduler')
                     #channel.send(cmd+'\r\n')
-                    #channel.send(scheduler+'\r\n')
+                    channel.send(scheduler+'\r\n')
                     time.sleep(2)
                     channel.send(script+'\r\n')
-                    print('b: ', script)
+                    #print('script: ', script)
                     channel_data = bytes()
                     time.sleep(2)
                     channel.send('quit\r\n')

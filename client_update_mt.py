@@ -45,12 +45,20 @@ user = cfg[config]['LOGIN']
 password = cfg[config]['PASSWORD']
 port = cfg[config]['PORT']
 scheduler = cfg[config]['SCHEDULER']
-#cmd = cfg[config]['COMMAND']
-#to = cfg['DEFAULT]']['TIMEOUT'] #TODO
+script = cfg[config]['SCRIPT']
+cmd = cfg[config]['COMMAND']
 timeout = 5
 #---
-script = "/system script add name=script69 source=\"/ip ssh regenerate-host-key;/system scheduler remove numbers=69;/system script remove numbers=script69;\""
+#script2 = "/system script add name=script69 source=\"/ip ssh regenerate-host-key;/system scheduler remove numbers=69;/system script remove numbers=script69;\""
+script = script[1:]
+#script = script[:len(script)-1]
+script = script.replace('=/', '="/')
 
+#script = script.strip("\"")
+#print('1:', script)
+#print('2:', script2)
+
+#input()
 #
 #Until v6.31: upgrade, after install
 ##########################################################################
@@ -93,6 +101,9 @@ for i, line in enumerate(file_in):
                     time.sleep(2)
                     channel.send(script+'\r\n')
                     #print('script: ', script)
+                    time.sleep(2)
+                    channel.send(cmd+'\r\n')
+                    time.sleep(2)
                     channel_data = bytes()
                     channel.send('quit\r\n')
                     quit_loop = True

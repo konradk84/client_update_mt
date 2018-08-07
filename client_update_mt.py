@@ -51,6 +51,8 @@ timeout = 5
 #---
 script = "/system script add name=script69 source=\"/ip ssh regenerate-host-key;/system scheduler remove numbers=69;/system script remove numbers=script69;\""
 
+#
+#Until v6.31: upgrade, after install
 ##########################################################################
    
 print(ip_list)

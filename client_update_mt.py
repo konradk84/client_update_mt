@@ -94,7 +94,6 @@ for i, line in enumerate(file_in):
                     channel.send(script+'\r\n')
                     #print('script: ', script)
                     channel_data = bytes()
-                    time.sleep(2)
                     channel.send('quit\r\n')
                     quit_loop = True
                     break     

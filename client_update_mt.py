@@ -42,7 +42,8 @@ if len(sys.argv) < 3:
     exit()
 
 config = sys.argv[1]
-ip_list = cfg[config]['IP_FILE']
+#ip_list = cfg[config]['IP_FILE']
+ip_list = sys.argv[2]
 user = cfg[config]['LOGIN']
 password = cfg[config]['PASSWORD']
 port = cfg[config]['PORT']
@@ -68,6 +69,7 @@ script = script.replace('=/', '="/')
 print(ip_list)
 ip_count = file_len(ip_list) #todo: check len, if 0 then exit
 file_in = open(ip_list, 'r')
+#file_in = open(sys.argv[2])
 for i, line in enumerate(file_in):
     try:
         quit_loop = False
@@ -94,11 +96,11 @@ for i, line in enumerate(file_in):
             if channel in r:
                 channel_data += channel.recv(9999)
                 buf = channel_data.decode('utf-8')
-                print('buf: ', buf)
-                debug(buf)
-                
+                #print('buf: ', buf)
+                #debug(buf)
 
                 if buf.endswith('] > ') == True:
+                    debug(buf)
                     debug('We found prompt')
                     if buf.find('version: ') != -1 and get_version == False:
                         ver_pos = buf.find('version: ')

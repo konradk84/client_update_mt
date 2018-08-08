@@ -124,6 +124,12 @@ for i, line in enumerate(file_in):
                     #print("dupa")
                     if get_version == True:
                         debug('Got version, updating')
+                        if float(version) >= 6.31:
+                            debug('greater or equal 6.31')
+                        elif float(version) < 6.31:
+                            debug('less 6.31')
+                        else:
+                            debug('case not know')
                         #channel.send(scheduler+'\r\n')
                         time.sleep(2)
                         #channel.send(script+'\r\n')

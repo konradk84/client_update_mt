@@ -28,6 +28,8 @@ def log_error(address, content):
 channel_data = bytes()
 buf = ''
 prompt = False
+get_version = False
+send_get_version = False
 
 cfg = configparser.ConfigParser()
 cfg.read('config.ini')
@@ -94,20 +96,51 @@ for i, line in enumerate(file_in):
                 buf = channel_data.decode('utf-8')
                 print('buf: ', buf)
                 debug(buf)
+                
+
                 if buf.endswith('] > ') == True:
-                    debug('We found prompt, sending scheduler')
-                    #channel.send(cmd+'\r\n')
-                    channel.send(scheduler+'\r\n')
-                    time.sleep(2)
-                    channel.send(script+'\r\n')
-                    #print('script: ', script)
-                    time.sleep(2)
-                    channel.send(cmd+'\r\n')
-                    time.sleep(2)
-                    channel_data = bytes()
-                    channel.send('quit\r\n')
-                    quit_loop = True
-                    break     
+                    debug('We found prompt')
+                    if buf.find('version: ') != -1 and get_version == False:
+                        ver_pos = buf.find('version: ')
+                        version = buf[ver_pos+9:ver_pos+15]
+                        version = version.strip( ' \r\n' )
+                        version = version.strip( 'rc' )
+                        #version = version.strip( 'rc') #strip rc versions
+                        print('VERSION: ', version)
+                        get_version = True
+                        if version.count('.') > 1:
+                            ver_pos = version.rfind('.')
+                            #print('ver_pos ostatniej .', ver_pos)
+                            #version = version[0:ver_pos] #bez wersji dziesietnie, ladne rozwiazanie
+                            version = version[:ver_pos] + version[ver_pos+1:] ##aktualziacja wersji dziesietnej, brzydkie rozwiazanie
+                        print('mamy ver: ', version, ', o dlugosci: ', len(version))
+                        #ver_content = 'mamy ver: ', version, ', o dlugosci: ', len(version)
+                        debug(version)
+                    if get_version == False and send_get_version == False:
+                        debug('Checking version')
+                        channel.send("system resource print\r\n")
+                        send_get_version = True
+                    #print(get_version, send_get_version)
+                    #print("dupa")
+                    if get_version == True:
+                        debug('Got version, updating')
+                        #channel.send(scheduler+'\r\n')
+                        time.sleep(2)
+                        #channel.send(script+'\r\n')
+                        time.sleep(2)
+                        #channel.send(cmd+'\r\n')
+                        time.sleep(2)
+                        channel_data = bytes()
+                        channel.send('quit\r\n')
+                        quit_loop = True
+                        get_version = False
+                        break
+                    if buf.find('bad command name') != -1:
+                        debug('bad command name')
+                        quit_loop = True
+                        get_version = False
+                        send_get_version = False
+                        break   
         percent = i / ip_count * 100
         print("---------------- done:  ", int(percent), "% -----------------")
 

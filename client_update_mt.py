@@ -27,9 +27,6 @@ def log_error(address, content):
 ############################################################################ 
 channel_data = bytes()
 buf = ''
-prompt = False
-get_version = False
-send_get_version = False
 
 cfg = configparser.ConfigParser()
 cfg.read('config.ini')
@@ -73,6 +70,9 @@ file_in = open(ip_list, 'r')
 for i, line in enumerate(file_in):
     try:
         quit_loop = False
+        prompt = False
+        get_version = False
+        send_get_version = False
         buf_ip = line
         ip = buf_ip.strip( '\n' )
 
@@ -92,6 +92,7 @@ for i, line in enumerate(file_in):
         channel = client.invoke_shell()
         channel_data = bytes()
         while quit_loop == False: #todo: fix that unecessery loop condition
+            timeout = 5
             r,w,e = select.select([channel], [], [], timeout)
             if channel in r:
                 channel_data += channel.recv(9999)
@@ -104,11 +105,14 @@ for i, line in enumerate(file_in):
                     debug('We found prompt')
                     if buf.find('version: ') != -1 and get_version == False:
                         ver_pos = buf.find('version: ')
+                        buf = buf.strip( '(stable)' )
                         version = buf[ver_pos+9:ver_pos+15]
+                        version = version.strip('(stable)')
                         version = version.strip( ' \r\n' )
                         version = version.strip( 'rc' )
                         #version = version.strip( 'rc') #strip rc versions
                         print('VERSION: ', version)
+                        input()
                         get_version = True
                         if version.count('.') > 1:
                             ver_pos = version.rfind('.')
@@ -149,6 +153,7 @@ for i, line in enumerate(file_in):
                         get_version = False
                         send_get_version = False
                         break   
+            print("t/o")
         percent = i / ip_count * 100
         print("---------------- done:  ", int(percent), "% -----------------")
 

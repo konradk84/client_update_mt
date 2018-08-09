@@ -152,7 +152,7 @@ for i, line in enumerate(file_in):
                         get_version = False
                         send_get_version = False
                         break   
-            print("t/o")
+            debug("t/o")
         percent = i / ip_count * 100
         print("---------------- done:  ", int(percent), "% -----------------")
 

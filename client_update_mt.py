@@ -112,7 +112,6 @@ for i, line in enumerate(file_in):
                         version = version.strip( 'rc' )
                         #version = version.strip( 'rc') #strip rc versions
                         print('VERSION: ', version)
-                        input()
                         get_version = True
                         if version.count('.') > 1:
                             ver_pos = version.rfind('.')

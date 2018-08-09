@@ -1,30 +1,5 @@
 import sys, paramiko, re, time, datetime, os, select, configparser
 
-
-def file_len(ip_list):
-    with open(ip_list) as f:
-        for i, l in enumerate(f):
-            pass
-    return i + 1
-
-def debug(content):
-    print(content)
-    time_now = datetime.datetime.now().strftime("%H:%M:%S")
-    log_file = open(cfg[config]['DEBUG_FILE'], 'a')
-    log_buf = ''
-    log_buf = 'log: ' +time_now+ ' : '+content + '\n'
-    log_file.write(log_buf)
-    log_file.close
-
-def log_error(address, content):
-    print(address, content)
-    time_now = datetime.datetime.now().strftime("%H:%M:%S")
-    log_file = open(cfg[config]['ERROR_FILE'], 'a')
-    log_buf = ''
-    log_buf = 'log: ' +time_now+ ' : '+address + ' : '+content + '\n'
-    log_file.write(log_buf)
-    log_file.close
-############################################################################ 
 channel_data = bytes()
 buf = ''
 
@@ -48,21 +23,39 @@ scheduler = cfg[config]['SCHEDULER']
 script = cfg[config]['SCRIPT']
 cmd = cfg[config]['COMMAND']
 timeout = 5
-#---
 #script2 = "/system script add name=script69 source=\"/ip ssh regenerate-host-key;/system scheduler remove numbers=69;/system script remove numbers=script69;\""
 script = script[1:]
-#script = script[:len(script)-1]
 script = script.replace('=/', '="/')
 
-#script = script.strip("\"")
-#print('1:', script)
-#print('2:', script2)
+def file_len(ip_list):
+    with open(ip_list) as f:
+        for i, l in enumerate(f):
+            pass
+    return i + 1
 
-#input()
-#
-#Until v6.31: upgrade, after install
-##########################################################################
-   
+def debug(content):
+    print(content)
+    time_now = datetime.datetime.now().strftime("%H:%M:%S")
+    file = ip_list.strip('.txt')
+    file = file + '_' + cfg[config]['DEBUG_FILE']
+    log_file = open(file, 'a')
+    log_buf = ''
+    log_buf = 'log: ' +time_now+ ' : '+content + '\n'
+    log_file.write(log_buf)
+    log_file.close
+
+def log_error(address, content):
+    print(address, content)
+    time_now = datetime.datetime.now().strftime("%H:%M:%S")
+    file = ip_list.strip('.txt')
+    file = file + '_' + cfg[config]['ERROR_FILE']
+    log_file = open(file, 'a')
+    log_buf = ''
+    log_buf = 'log: ' +time_now+ ' : '+address + ' : '+content + '\n'
+    log_file.write(log_buf)
+    log_file.close
+############################################################################ 
+
 print(ip_list)
 ip_count = file_len(ip_list) #todo: check len, if 0 then exit
 file_in = open(ip_list, 'r')
@@ -148,6 +141,7 @@ for i, line in enumerate(file_in):
                         break
                     if buf.find('bad command name') != -1:
                         debug('bad command name')
+                        log_error(ip, buf+'\r\nbad command name\r\n')
                         quit_loop = True
                         get_version = False
                         send_get_version = False

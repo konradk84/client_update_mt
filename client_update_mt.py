@@ -1,4 +1,5 @@
 import sys, paramiko, re, time, datetime, os, select, configparser
+from log_class import *
 
 channel_data = bytes()
 buf = ''
@@ -33,7 +34,11 @@ def file_len(ip_list):
             pass
     return i + 1
 
-def debug(content):
+file_out = ip_list.strip('.txt')
+file_out = file + '_' + cfg[config]['DEBUG_FILE']
+log = Log(file_out)
+
+'''def debug(content):
     print(content)
     time_now = datetime.datetime.now().strftime("%H:%M:%S")
     file = ip_list.strip('.txt')
@@ -53,7 +58,7 @@ def log_error(address, content):
     log_buf = ''
     log_buf = 'log: ' +time_now+ ' : '+address + ' : '+content + '\n'
     log_file.write(log_buf)
-    log_file.close
+    log_file.close'''
 ############################################################################ 
 
 print(ip_list)

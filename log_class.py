@@ -22,6 +22,7 @@ class Log():
         print(buf)
         self.log_debug.write(buf)
         #self.log_debug.close
+    
     def error_log(self, address, content):
         log_error = self.__init__
         self.time_now = datetime.datetime.now().strftime("%H:%M:%S")

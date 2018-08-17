@@ -34,32 +34,9 @@ def file_len(ip_list):
             pass
     return i + 1
 
-file_out = ip_list.strip('.txt')
+file = ip_list.strip('.txt')
 file_out = file + '_' + cfg[config]['DEBUG_FILE']
 log = Log(file_out)
-
-'''def debug(content):
-    print(content)
-    time_now = datetime.datetime.now().strftime("%H:%M:%S")
-    file = ip_list.strip('.txt')
-    file = file + '_' + cfg[config]['DEBUG_FILE']
-    log_file = open(file, 'a')
-    log_buf = ''
-    log_buf = 'log: ' +time_now+ ' : '+content + '\n'
-    log_file.write(log_buf)
-    log_file.close
-
-def log_error(address, content):
-    print(address, content)
-    time_now = datetime.datetime.now().strftime("%H:%M:%S")
-    file = ip_list.strip('.txt')
-    file = file + '_' + cfg[config]['ERROR_FILE']
-    log_file = open(file, 'a')
-    log_buf = ''
-    log_buf = 'log: ' +time_now+ ' : '+address + ' : '+content + '\n'
-    log_file.write(log_buf)
-    log_file.close'''
-############################################################################ 
 
 print(ip_list)
 ip_count = file_len(ip_list) #todo: check len, if 0 then exit
@@ -74,8 +51,8 @@ for i, line in enumerate(file_in):
         buf_ip = line
         ip = buf_ip.strip( '\n' )
 
-        debug('############################################\n')
-        debug(ip)
+        log.debug('############################################\n')
+        log.debug(ip)
         #print('############################################\n')
         print('ip_address: ', ip)
         
@@ -85,7 +62,7 @@ for i, line in enumerate(file_in):
         client.connect(ip, port=port, username=user, password=password, timeout=10)
         
         #print("logged in\n")
-        debug("logged in\n")
+        log.debug("logged in\n")
         
         channel = client.invoke_shell()
         channel_data = bytes()
@@ -96,11 +73,11 @@ for i, line in enumerate(file_in):
                 channel_data += channel.recv(9999)
                 buf = channel_data.decode('utf-8')
                 #print('buf: ', buf)
-                #debug(buf)
+                #log.debug(buf)
 
                 if buf.endswith('] > ') == True:
-                    debug(buf)
-                    debug('We found prompt')
+                    log.debug(buf)
+                    log.debug('We found prompt')
                     if buf.find('version: ') != -1 and get_version == False:
                         ver_pos = buf.find('version: ')
                         buf = buf.strip( '(stable)' )
@@ -118,21 +95,21 @@ for i, line in enumerate(file_in):
                             version = version[:ver_pos] + version[ver_pos+1:] ##aktualziacja wersji dziesietnej, brzydkie rozwiazanie
                         print('mamy ver: ', version, ', o dlugosci: ', len(version))
                         #ver_content = 'mamy ver: ', version, ', o dlugosci: ', len(version)
-                        debug(version)
+                        log.debug(version)
                     if get_version == False and send_get_version == False:
-                        debug('Checking version')
+                        log.debug('Checking version')
                         channel.send("system resource print\r\n")
                         send_get_version = True
                     #print(get_version, send_get_version)
                     #print("dupa")
                     if get_version == True:
-                        debug('Got version, updating')
+                        log.debug('Got version, updating')
                         if float(version) >= 6.31:
-                            debug('greater or equal 6.31')
+                            log.debug('greater or equal 6.31')
                         elif float(version) < 6.31:
-                            debug('less 6.31')
+                            log.debug('less 6.31')
                         else:
-                            debug('case not know')
+                            log.debug('case not know')
                         #channel.send(scheduler+'\r\n')
                         time.sleep(2)
                         #channel.send(script+'\r\n')
@@ -145,36 +122,36 @@ for i, line in enumerate(file_in):
                         get_version = False
                         break
                     if buf.find('bad command name') != -1:
-                        debug('bad command name')
-                        log_error(ip, buf+'\r\nbad command name\r\n')
+                        log.debug('bad command name')
+                        #log_error(ip, buf+'\r\nbad command name\r\n')
                         quit_loop = True
                         get_version = False
                         send_get_version = False
                         break   
-            debug("t/o")
+            log.debug("t/o")
         percent = i / ip_count * 100
         print("---------------- done:  ", int(percent), "% -----------------")
 
     except paramiko.ssh_exception.AuthenticationException as ssherr:
-        debug(str(ssherr))
+        log.debug(str(ssherr))
         #print (ssherr)
         client.close()
     except paramiko.ssh_exception.SSHException as ssherr:
-        debug(str(ssherr))
+        log.debug(str(ssherr))
         #print (ssherr)
         client.close()
     except paramiko.ssh_exception.socket.error as ssherr:
-        debug(str(ssherr))
+        log.debug(str(ssherr))
         #print (ssherr)
         client.close()
     except paramiko.ssh_exception.BadHostKeyException as ssherr:
-        debug(str(ssherr))
+        log.debug(str(ssherr))
         #print (ssherr)
         client.close()
     finally:
         client.close()
 #print ("done")
-debug("done")
+log.debug("done")
 	
 	
 	

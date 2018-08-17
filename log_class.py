@@ -17,6 +17,7 @@ class Log():
         self.time_now = datetime.datetime.now().strftime("%H:%M:%S")
         self.content = content
         buf = self.time_now + ' : ' + self.content + '\n'
+        print(buf)
         self.log_file.write(buf)
         #self.log_file.close
     def error_log(self, address, content):
@@ -26,9 +27,9 @@ class Log():
         self.content = content
         buf = self.time_now + ' : ' + address  + self.content + '\n'
         self.log_file.write(buf)
-
-
         #file = file + '_' + cfg[config]['ERROR_FILE']
+
+
 #ob = Log('ip.txt', 'out.test')
 #print('dlugosc', ob.file_len('ip.txt'))
 #ob.write_to_log('asd')

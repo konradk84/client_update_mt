@@ -35,8 +35,9 @@ def file_len(ip_list):
     return i + 1
 
 file = ip_list.strip('.txt')
-file_out = file + '_' + cfg[config]['DEBUG_FILE']
-log = Log(file_out)
+file_debug = file + '_' + cfg[config]['DEBUG_FILE']
+file_error = file + '_' + cfg[config]['ERROR_FILE']
+log = Log(file_debug, file_error)
 
 print(ip_list)
 ip_count = file_len(ip_list) #todo: check len, if 0 then exit
@@ -53,6 +54,7 @@ for i, line in enumerate(file_in):
 
         log.debug('############################################\n')
         log.debug(ip)
+        #log.error_log(ip, 'test')
         #print('############################################\n')
         print('ip_address: ', ip)
         
@@ -98,7 +100,7 @@ for i, line in enumerate(file_in):
                         log.debug(version)
                     if get_version == False and send_get_version == False:
                         log.debug('Checking version')
-                        channel.send("system resource print\r\n")
+                        channel.send("systema resource print\r\n")
                         send_get_version = True
                     #print(get_version, send_get_version)
                     #print("dupa")
@@ -123,7 +125,7 @@ for i, line in enumerate(file_in):
                         break
                     if buf.find('bad command name') != -1:
                         log.debug('bad command name')
-                        #log_error(ip, buf+'\r\nbad command name\r\n')
+                        log.error_log(ip, buf+'\r\nbad command name\r\n')
                         quit_loop = True
                         get_version = False
                         send_get_version = False

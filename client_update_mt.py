@@ -87,6 +87,7 @@ for i, line in enumerate(file_in):
                         version = version.strip('(stable)')
                         version = version.strip( ' \r\n' )
                         version = version.strip( 'rc' )
+                        version = version.strip( 'rc1' )
                         #version = version.strip( 'rc') #strip rc versions
                         print('VERSION: ', version)
                         get_version = True

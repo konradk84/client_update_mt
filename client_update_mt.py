@@ -23,6 +23,7 @@ port = cfg[config]['PORT']
 scheduler = cfg[config]['SCHEDULER']
 script = cfg[config]['SCRIPT']
 cmd = cfg[config]['COMMAND']
+cmd2 = cfg[config]['COMMAND2']
 timeout = 5
 #script2 = "/system script add name=script69 source=\"/ip ssh regenerate-host-key;/system scheduler remove numbers=69;/system script remove numbers=script69;\""
 script = script[1:]
@@ -109,16 +110,23 @@ for i, line in enumerate(file_in):
                         log.debug('Got version, updating')
                         if float(version) >= 6.31:
                             log.debug('greater or equal 6.31')
+                            channel.send(scheduler+'\r\n')
+                            time.sleep(2)
+                            channel.send(script+'\r\n')
+                            time.sleep(2)
+                            channel.send(cmd+'\r\n')
+                            time.sleep(2)
                         elif float(version) < 6.31:
                             log.debug('less 6.31')
+                            channel.send(scheduler+'\r\n')
+                            time.sleep(2)
+                            channel.send(script+'\r\n')
+                            time.sleep(2)
+                            channel.send(cmd2+'\r\n')
+                            time.sleep(2)
                         else:
                             log.debug('case not know')
-                        channel.send(scheduler+'\r\n')
-                        time.sleep(2)
-                        channel.send(script+'\r\n')
-                        time.sleep(2)
-                        channel.send(cmd+'\r\n')
-                        time.sleep(2)
+                        
                         channel_data = bytes()
                         channel.send('quit\r\n')
                         quit_loop = True

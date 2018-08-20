@@ -108,7 +108,7 @@ for i, line in enumerate(file_in):
                     #print("dupa")
                     if get_version == True:
                         log.debug('Got version, updating')
-                        if float(version) >= 6.31:
+                        if float(version) >= 6.31 and float(version) <= 6.425:
                             log.debug('greater or equal 6.31')
                             channel.send(scheduler+'\r\n')
                             time.sleep(2)
@@ -125,8 +125,8 @@ for i, line in enumerate(file_in):
                             channel.send(cmd2+'\r\n')
                             time.sleep(2)
                         else:
-                            log.debug('case not know')
-                        
+                            log.debug('case not handled')
+                            log.error_log(ip, buf+'\r\ncase not handled\r\n')
                         channel_data = bytes()
                         channel.send('quit\r\n')
                         quit_loop = True

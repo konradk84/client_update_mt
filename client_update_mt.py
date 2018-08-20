@@ -108,7 +108,7 @@ for i, line in enumerate(file_in):
                     #print("dupa")
                     if get_version == True:
                         log.debug('Got version, updating')
-                        if float(version) >= 6.31 and float(version) <= 6.425:
+                        if float(version) >= 6.31 and float(version) != 6.427:
                             log.debug('greater or equal 6.31')
                             channel.send(scheduler+'\r\n')
                             time.sleep(2)

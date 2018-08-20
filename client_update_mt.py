@@ -101,7 +101,7 @@ for i, line in enumerate(file_in):
                         log.debug(version)
                     if get_version == False and send_get_version == False:
                         log.debug('Checking version')
-                        channel.send("systema resource print\r\n")
+                        channel.send("system resource print\r\n")
                         send_get_version = True
                     #print(get_version, send_get_version)
                     #print("dupa")

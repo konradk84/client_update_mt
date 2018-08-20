@@ -12,6 +12,7 @@ class Log():
         log_debug = self.__init__
         log_error = self.__init__
         self.log_debug.close
+        self.log_error.close
         #print('file closed')
 
     def debug(self, content):

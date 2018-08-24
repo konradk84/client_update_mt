@@ -83,13 +83,13 @@ for i, line in enumerate(file_in):
                     log.debug('We found prompt')
                     if buf.find('version: ') != -1 and get_version == False:
                         ver_pos = buf.find('version: ')
-                        buf = buf.strip( '(stable)' )
                         version = buf[ver_pos+9:ver_pos+15]
                         version = version.strip('(stable)')
-                        version = version.strip( ' \r\n' )
+                        #linijka ponizej usuwala 1 z versji 6.31. Nie wiem jak zachowa sie w przypadku innych wersji
+                        #version = version.strip( '\r\n' )
                         version = version.strip( 'rc' )
                         version = version.strip( 'rc1' )
-                        #version = version.strip( 'rc') #strip rc versions
+                        version = version.strip( 'rc5' )
                         print('VERSION: ', version)
                         get_version = True
                         if version.count('.') > 1:

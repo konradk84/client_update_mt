@@ -85,7 +85,8 @@ for i, line in enumerate(file_in):
                         ver_pos = buf.find('version: ')
                         version = buf[ver_pos+9:ver_pos+15]
                         version = version.strip('(stable)')
-                        #linijka ponizej usuwala 1 z versji 6.31. Nie wiem jak zachowa sie w przypadku innych wersji
+                        version = version.strip('(bugfix)')
+#linijka ponizej usuwala 1 z versji 6.31. Nie wiem jak zachowa sie w przypadku innych wersji
                         #version = version.strip( '\r\n' )
                         version = version.strip( 'rc' )
                         version = version.strip( 'rc1' )
@@ -108,7 +109,7 @@ for i, line in enumerate(file_in):
                     #print("dupa")
                     if get_version == True:
                         log.debug('Got version, updating')
-                        if float(version) == 6.7:
+                        if float(version) == 6.7 or float(version) == 6.6:
                             log.debug('equal 6.7')
                             channel.send(scheduler+'\r\n')
                             time.sleep(2)

@@ -149,8 +149,9 @@ for i, line in enumerate(file_in):
                         send_get_version = False
                         break   
             log.debug("t/o")
-            if(int(time.time()) > now + 120):
-                log.debug('timeout 120 s')
+            if(int(time.time()) > now + 60):
+                log.debug('timeout 60 s')
+                log.error_log(ip, 'timeout 60 s')
                 quit_loop = True
                 get_version = False
                 send_get_version = False

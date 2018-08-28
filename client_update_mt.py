@@ -66,7 +66,7 @@ for i, line in enumerate(file_in):
         
         #print("logged in\n")
         log.debug("logged in\n")
-        
+        now = int(time.time())
         channel = client.invoke_shell()
         channel_data = bytes()
         while quit_loop == False: #todo: fix that unecessery loop condition
@@ -86,7 +86,7 @@ for i, line in enumerate(file_in):
                         version = buf[ver_pos+9:ver_pos+15]
                         version = version.strip('(stable)')
                         version = version.strip('(bugfix)')
-#linijka ponizej usuwala 1 z versji 6.31. Nie wiem jak zachowa sie w przypadku innych wersji
+                        #linijka ponizej usuwala 1 z versji 6.31. Nie wiem jak zachowa sie w przypadku innych wersji
                         #version = version.strip( '\r\n' )
                         version = version.strip( 'rc' )
                         version = version.strip( 'rc1' )
@@ -149,6 +149,12 @@ for i, line in enumerate(file_in):
                         send_get_version = False
                         break   
             log.debug("t/o")
+            if(int(time.time()) > now + 120):
+                log.debug('timeout 120 s')
+                quit_loop = True
+                get_version = False
+                send_get_version = False
+                break   
         percent = i / ip_count * 100
         print("---------------- done:  ", int(percent), "% -----------------")
 

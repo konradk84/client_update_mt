@@ -86,11 +86,14 @@ for i, line in enumerate(file_in):
                         version = buf[ver_pos+9:ver_pos+15]
                         version = version.strip('(stable)')
                         version = version.strip('(bugfix)')
+                        version = version.strip( '(testing)' )
                         #linijka ponizej usuwala 1 z versji 6.31. Nie wiem jak zachowa sie w przypadku innych wersji
                         #version = version.strip( '\r\n' )
                         version = version.strip( 'rc' )
                         version = version.strip( 'rc1' )
                         version = version.strip( 'rc5' )
+                        version = version.strip( 'rc7' )
+                        version = version.strip( ' ' )
                         print('VERSION: ', version)
                         get_version = True
                         if version.count('.') > 1:

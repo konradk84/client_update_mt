@@ -1,5 +1,6 @@
 import sys, paramiko, re, time, datetime, os, select, configparser
 from log_class import *
+from version_mt_class import *
 
 channel_data = bytes()
 buf = ''
@@ -82,74 +83,28 @@ for i, line in enumerate(file_in):
                     log.debug(buf)
                     log.debug('We found prompt')
                     if buf.find('version: ') != -1 and get_version == False:
-                        #ver_pos = buf.find('version: ')
-                        #version = buf[ver_pos+9:ver_pos+15]
-                        rl = io.StringIO(buf)
-                        while True:
-                            line = rl.readline()
-                            if line.find('version: ' ) != -1:
-                                print('got it: ', line)
-                                print(len(line))
-                                ver_pos = line.find('version: ')
-                                version = line[ver_pos:]
-                                print('version: ', version)
-                                print(len(version))
-                                print('version0: ', version[0])
-                                version = version.strip( '(stable)' )
-                                version = version.strip( '(bugfix)' )
-                                version = version.strip( '(testing)' )
-                                version = version.strip( 'rc' )
-                                version = version.strip( 'rc1' )
-                                version = version.strip( 'rc2' )
-                                version = version.strip( 'rc3' )
-                                version = version.strip( 'rc4' )
-                                version = version.strip( 'rc5' )
-                                version = version.strip( 'rc6' )
-                                version = version.strip( 'rc7' )
-                                version = version.strip( ' ' )
-                            input()
-                        #for line in rl.readline():
-                            print(line)
-                            
-                        #buf.readline()
-                        print('stop!!')
-                        input()
-                        
-                        print('buf: ', buf)
-                        print("version: ", version)
-                        print("ver_pos: ", ver_pos)
-                        print("ver_pos+9: ", ver_pos+9)
-                        print("ver_pos+15: ", ver_pos+15)
-                        input()
-                        #linijka ponizej usuwala 1 z versji 6.31. Nie wiem jak zachowa sie w przypadku innych wersji
-                        #version = version.strip( '\r\n' )
-                        print('VERSION: ', version)
+                        try:
+                            version = Version()
+                            version = version.find_version(buf)
+                        except:
+                            log.log_error(ip, " exception occured: \r\n" + "-------------- buf start -------------\r\n" + buf + '\r\n-------------- buf end -------------')
+                            quit_loop = True
+                            get_version = False
+                            send_get_version = False
+                            client.close()
+                        #print('version object method returns: ')
+                        #print('version: ', version, ' version len: ', len(version))
                         get_version = True
-                        if version.count('.') > 1:
-                            ver_pos = version.rfind('.')
-                            #print('ver_pos ostatniej .', ver_pos)
-                            #version = version[0:ver_pos] #bez wersji dziesietnie, ladne rozwiazanie
-                            version = version[:ver_pos] + version[ver_pos+1:] ##aktualziacja wersji dziesietnej, brzydkie rozwiazanie
-                        print('mamy ver: ', version, ', o dlugosci: ', len(version))
-                        #ver_content = 'mamy ver: ', version, ', o dlugosci: ', len(version)
+                        #print('mamy ver: ', version, ', o dlugosci: ', len(version))
+                        #input()
                         log.debug(version)
                     if get_version == False and send_get_version == False:
                         log.debug('Checking version')
                         channel.send("system resource print\r\n")
                         send_get_version = True
-                    #print(get_version, send_get_version)
-                    #print("dupa")
                     if get_version == True:
                         log.debug('Got version, updating')
-                        if float(version) == 6.7 or float(version) == 6.6:
-                            log.debug('equal 6.7')
-                            channel.send(scheduler+'\r\n')
-                            time.sleep(2)
-                            channel.send(script+'\r\n')
-                            time.sleep(2)
-                            channel.send(cmd2+'\r\n')
-                            time.sleep(2)
-                        elif float(version) >= 6.31 and float(version) != 6.427:
+                        if float(version) >= 6.31 and float(version) != 6.427:
                             log.debug('greater or equal 6.31')
                             channel.send(scheduler+'\r\n')
                             time.sleep(2)

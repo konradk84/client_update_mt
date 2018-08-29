@@ -82,18 +82,47 @@ for i, line in enumerate(file_in):
                     log.debug(buf)
                     log.debug('We found prompt')
                     if buf.find('version: ') != -1 and get_version == False:
-                        ver_pos = buf.find('version: ')
-                        version = buf[ver_pos+9:ver_pos+15]
-                        version = version.strip('(stable)')
-                        version = version.strip('(bugfix)')
-                        version = version.strip( '(testing)' )
+                        #ver_pos = buf.find('version: ')
+                        #version = buf[ver_pos+9:ver_pos+15]
+                        rl = io.StringIO(buf)
+                        while True:
+                            line = rl.readline()
+                            if line.find('version: ' ) != -1:
+                                print('got it: ', line)
+                                print(len(line))
+                                ver_pos = line.find('version: ')
+                                version = line[ver_pos:]
+                                print('version: ', version)
+                                print(len(version))
+                                print('version0: ', version[0])
+                                version = version.strip( '(stable)' )
+                                version = version.strip( '(bugfix)' )
+                                version = version.strip( '(testing)' )
+                                version = version.strip( 'rc' )
+                                version = version.strip( 'rc1' )
+                                version = version.strip( 'rc2' )
+                                version = version.strip( 'rc3' )
+                                version = version.strip( 'rc4' )
+                                version = version.strip( 'rc5' )
+                                version = version.strip( 'rc6' )
+                                version = version.strip( 'rc7' )
+                                version = version.strip( ' ' )
+                            input()
+                        #for line in rl.readline():
+                            print(line)
+                            
+                        #buf.readline()
+                        print('stop!!')
+                        input()
+                        
+                        print('buf: ', buf)
+                        print("version: ", version)
+                        print("ver_pos: ", ver_pos)
+                        print("ver_pos+9: ", ver_pos+9)
+                        print("ver_pos+15: ", ver_pos+15)
+                        input()
                         #linijka ponizej usuwala 1 z versji 6.31. Nie wiem jak zachowa sie w przypadku innych wersji
                         #version = version.strip( '\r\n' )
-                        version = version.strip( 'rc' )
-                        version = version.strip( 'rc1' )
-                        version = version.strip( 'rc5' )
-                        version = version.strip( 'rc7' )
-                        version = version.strip( ' ' )
                         print('VERSION: ', version)
                         get_version = True
                         if version.count('.') > 1:

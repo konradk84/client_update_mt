@@ -114,10 +114,12 @@ for i, line in enumerate(file_in):
                             time.sleep(2)
                         elif float(version) < 6.31:
                             log.debug('less 6.31')
-                            channel.send(scheduler+'\r\n')
-                            time.sleep(2)
-                            channel.send(script+'\r\n')
-                            time.sleep(2)
+                            if float(version) >= 6.0:
+                                log.debug('greater or equal 6.0')
+                                channel.send(scheduler+'\r\n')
+                                time.sleep(2)
+                                channel.send(script+'\r\n')
+                                time.sleep(2)
                             channel.send(cmd2+'\r\n')
                             time.sleep(2)
                         else:
